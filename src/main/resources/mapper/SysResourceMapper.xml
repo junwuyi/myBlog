@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="ssm.mapper.SysResourceMapper">
+    <resultMap id="rm" type="ssm.entity.SysResources">
+        <result property="id" jdbcType="BIGINT" column="id"/>
+        <result property="name" jdbcType="VARCHAR" column="name"/>
+        <result property="type" jdbcType="VARCHAR" column="type"/>
+        <result property="url" jdbcType="VARCHAR" column="url"/>
+        <result property="permission" jdbcType="VARCHAR" column="permission"/>
+        <result property="parentId" jdbcType="BIGINT" column="parent_id"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result property="external" jdbcType="BIT" column="external"/>
+        <result property="available" jdbcType="BIT" column="available"/>
+        <result property="icon" jdbcType="VARCHAR" column="icon"/>
+        <result property="checked" jdbcType="VARCHAR" column="checked"/>
+    </resultMap>
+    <select id="findAll" resultMap="rm">
+        SELECT id,`name`,`type`,url,permission,parent_id,sort,`external`,available,icon,create_time,update_time
+        FROM sys_resources
+    </select>
+
+
+</mapper>
+

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.mapper.RoleMapper">
+    <resultMap id="BaseResultMap" type="ssm.entity.Role">
+        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+        <result column="role_desc" jdbcType="VARCHAR" property="roleDesc"/>
+        <result column="role_level" jdbcType="INTEGER" property="roleLevel"/>
+    </resultMap>
+
+    <!--定义表名-->
+    <sql id="tb">role</sql>
+
+    <!--查询所有角色-->
+    <select id="findAll" resultType="ssm.entity.Role">
+        SELECT * FROM
+        role
+        ORDER BY role_level ASC
+    </select>
+
+    <!--根据角色id查询出对应的用户数-->
+    <select id="countUserByRoleId" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT count(*)
+        FROM role,user_role_ref
+        WHERE role.role_id = #{roleId} AND role.role_id = user_role_ref.role_id
+    </select>
+
+    <!--查询出用户没有的角色-->
+    <select id="findOtherRoles" parameterType="java.lang.Integer" resultType="ssm.entity.Role">
+        SELECT * FROM
+        role WHERE role.role_id not in(SELECT role_id FROM user_role_ref WHERE user_role_ref.user_id = #{userId})
+    </select>
+</mapper>

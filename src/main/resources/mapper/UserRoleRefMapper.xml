@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.mapper.UserRoleRefMapper">
+    <resultMap id="BaseResultMap" type="ssm.entity.UserRoleRef">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result property="createTime" jdbcType="TIMESTAMP" column="create_time"/>
+        <result property="updateTime" jdbcType="TIMESTAMP" column="update_time"/>
+    </resultMap>
+
+    <!--定义表名-->
+    <sql id="tb">user_role_ref</sql>
+
+    <!--根据用户id查询所对应的角色-->
+    <select id="findRoleByUserId" resultType="ssm.entity.Role" parameterType="java.lang.Integer">
+        SELECT
+        role.role_id,role.role_name,role.role_desc,role.role_level
+        FROM role,user_role_ref
+        WHERE user_role_ref.user_id = #{userId}
+        AND user_role_ref.role_id = role.role_id
+    </select>
+
+    <insert id="addRoleToUser">
+        insert INTO
+        <include refid="tb"/>
+        (user_id,role_id)VALUES
+        (#{userId},#{roleId})
+    </insert>
+</mapper>

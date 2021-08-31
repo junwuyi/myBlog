@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.mapper.ArticleCategoryRefMapper">
+    <resultMap id="BaseResultMap" type="ssm.entity.ArticleCategoryRef">
+        <result column="article_id" jdbcType="INTEGER" property="articleId"/>
+        <result column="category_id" jdbcType="INTEGER" property="categoryId"/>
+    </resultMap>
+
+    <!--定义表名-->
+    <sql id="tb">article_category_ref</sql>
+
+    <!--根据文章ID获得分类列表-->
+    <select id="listCategoryByArticleId" parameterType="java.lang.Integer"
+            resultType="ssm.entity.Category">
+        SELECT
+        category.category_id, category.category_pid, category.category_name
+        FROM category, article_category_ref
+        WHERE article_category_ref.article_id = #{value} AND
+        article_category_ref.category_id = category.category_id
+        ORDER BY category.category_pid asc
+    </select>
+
+    <!--添加文章和分类关联记录-->
+    <insert id="insert" parameterType="java.lang.Integer">
+        insert INTO
+        <include refid="tb"/>
+        (article_id, category_id)
+        VALUES (#{articleId}, #{categoryId})
+    </insert>
+
+    <!--根据分类id获取文章数量-->
+    <select id="countArticleByCategoryId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from
+        <include refid="tb"/>
+        where category_id = #{value}
+    </select>
+
+    <!--根据文章id删除文章和分类的关联记录-->
+    <delete id="deleteByArticleId" parameterType="java.lang.Integer" >
+        DELETE
+        FROM
+        <include refid="tb"/>
+        WHERE article_id = #{value}
+    </delete>
+
+    <!--批量删除文章和分类关联记录-->
+    <delete id="deleteBatch" parameterType="list">
+        DELETE FROM
+        <include refid="tb"/>
+        <if test="ids != null">
+            WHERE article_id IN
+            <foreach collection="ids" open="(" close=")" separator="," item="id">
+                #{id}
+            </foreach>
+        </if>
+    </delete>
+
+    <select id="selectCategoryIdByArticleId" resultType="java.lang.Integer">
+        SELECT category_id FROM
+        <include refid="tb"/>
+        WHERE article_id = #{value}
+    </select>
+
+</mapper>

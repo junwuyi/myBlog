@@ -1,0 +1,41 @@
+package ssm.enums;
+
+/**
+ * @author chen
+ * @date 2018/11/17 下午4:47
+ */
+
+public enum Role {
+
+    ADMIN(1, "博主"),
+    VISITOR(0, "访客"),
+    /**
+     * 投稿者
+     */
+    CONTRIBUTOR(2,"投稿者");
+
+    private Integer value;
+
+    private String message;
+
+    Role(Integer value, String message) {
+        this.value = value;
+        this.message = message;
+    }
+
+    public Integer getValue() {
+        return value;
+    }
+
+    public void setValue(Integer value) {
+        this.value = value;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+}

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.mapper.AttachmentMapper">
+    <resultMap id="BaseResultMap" type="ssm.entity.Attachment">
+        <result column="attach_id" jdbcType="INTEGER" property="attachId"/>
+        <!--非主键字段的对应-->
+        <result column="attach_name" property="attachName" jdbcType="VARCHAR"/>
+        <result column="attach_path" property="attachPath" jdbcType="VARCHAR"/>
+        <result column="attach_small_path" property="attachSmallPath" jdbcType="VARCHAR"/>
+        <result column="attach_type" property="attachType" jdbcType="VARCHAR"/>
+        <result column="attach_suffix" property="attachSuffix" jdbcType="VARCHAR"/>
+        <result column="attach_created" property="attachCreated" jdbcType="TIMESTAMP"/>
+        <result column="attach_size" property="attachSize" jdbcType="VARCHAR"/>
+        <result column="attach_wh" property="attachWh" jdbcType="VARCHAR"/>
+        <result column="attach_location" property="attachLocation" jdbcType="VARCHAR"/>
+        <result column="attach_origin" property="attachOrigin" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--定义表名-->
+    <sql id="tb">attachment</sql>
+
+    <!--添加附件信息到数据库-->
+    <insert id="insert" parameterType="ssm.entity.Attachment">
+        INSERT INTO attachment(
+        attach_name,attach_path,attach_small_path,attach_type,attach_suffix,
+        attach_created,attach_size,attach_wh,attach_location,attach_origin)
+        VALUES(#{attachName,jdbcType=VARCHAR},#{attachPath,jdbcType=VARCHAR},#{attachSmallPath,jdbcType=VARCHAR},
+        #{attachType,jdbcType=VARCHAR},#{attachSuffix,jdbcType=VARCHAR},#{attachCreated,jdbcType=TIMESTAMP},
+        #{attachSize,jdbcType=VARCHAR},#{attachWh,jdbcType=VARCHAR},#{attachLocation,jdbcType=VARCHAR},#{attachOrigin,jdbcType=INTEGER})
+    </insert>
+
+    <!--查询所有-->
+    <select id="findAll" resultType="ssm.entity.Attachment">
+        SELECT *
+        FROM <include refid="tb"/>
+    </select>
+
+    <!--根据id查询附件信息-->
+    <select id="selectById" parameterType="java.lang.Long" resultType="ssm.entity.Attachment">
+        SELECT * FROM
+        <include refid="tb"/>
+        WHERE attach_id = #{attachId}
+    </select>
+
+    <!--获取附件总数-->
+    <select id="getCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM
+        <include refid="tb"/>
+    </select>
+
+    <!--根据id删除附件信息-->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM
+        <include refid="tb"/>
+        WHERE attach_id = #{attachId}
+    </delete>
+</mapper>

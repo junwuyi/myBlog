@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ssm.mapper.MusicMapper">
+    <resultMap id="BaseResultMap" type="ssm.entity.Music">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="artist" jdbcType="VARCHAR" property="artist"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="cover" jdbcType="VARCHAR" property="cover"/>
+        <result column="lrc"  property="lrc"/>
+    </resultMap>
+
+    <!--定义表名-->
+    <sql id="tb">music</sql>
+
+    <insert id="save" parameterType="ssm.entity.Music" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        <include refid="tb"/>
+        (id, name, artist, url, cover,lrc)
+        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{artist,jdbcType=VARCHAR},
+        #{url,jdbcType=VARCHAR}, #{cover,jdbcType=VARCHAR},#{lrc})
+    </insert>
+
+    <update id="update" parameterType="ssm.entity.Music">
+        update
+        <include refid="tb"/>
+        <set>
+            <if test="name != null">name = #{name,jdbcType=VARCHAR},</if>
+            <if test="artist != null">artist = #{artist,jdbcType=VARCHAR},</if>
+            <if test="url != null">url = #{url,jdbcType=VARCHAR},</if>
+            <if test="cover != null">cover = #{cover,jdbcType=VARCHAR},</if>
+            <if test="lrc != null">lrc = #{lrc},</if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!--查询所有-->
+    <select id="findAll" resultType="ssm.entity.Music">
+      SELECT * FROM
+      music
+      ORDER BY music.id DESC
+    </select>
+
+    <!--查询一个-->
+    <select id="getMusicById" resultType="ssm.entity.Music" parameterType="java.lang.Integer">
+        select * from <include refid="tb"/>
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!--查询一个-->
+    <select id="delMusicById" parameterType="java.lang.Integer">
+        DELETE from <include refid="tb"/>
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+
+</mapper>
